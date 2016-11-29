@@ -1,7 +1,7 @@
 
-class Store (reducer){
+class Store {
 
-  constructor(private reducer: function){
+  constructor(private reducer:any){
     this.state = reducer(null,{})
     this.listeners = [];
     this.statehistory = []; //holds previous states in the form of a stack
@@ -21,7 +21,7 @@ class Store (reducer){
   }
 
   subscribe(fn){
-    this.listenerHistory.push(this.listeners);
+    this.listenerHistory.push(this.listeners); //saving the previous listeners history to the array
     this.listeners = this.listeners.concat(fn); // not altering the original listeners array.
     return () => this.listeners.filter( func => func !== fn)
   }
