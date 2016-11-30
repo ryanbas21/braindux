@@ -8,6 +8,8 @@ export class StoreService {
     constructor() { }
     private state: Object;
     private listeners: Function[];
+    public reducers = [];
+
     /**
       private stateHistory: Object[]; //holds previous states in the form of a stack
       private listenerHistory: Function[][];
@@ -18,21 +20,22 @@ export class StoreService {
     // After initialization, do NOT modify this.state. Copy to and modify newState, and return that instead.
     // Previous version of this.state will be saved in this.stateHistory by the dispatch method.
 
-    private reducers: Function[];
 
-    // Pass reducers into the addReducer function. Each reducer must take in a state, an action, and return a new state.
-    // Format: function reducer( )
-    private addReducer(reducer: Function): void {
-        this.reducers = this.reducers.concat(reducer);
+
+    getState() {
+        return this.state
     }
-
-    getState() { return this.state }
 
     dispatch(action: Object) {
         // this.stateHistory.push(this.state);
         let newState = this.reducers.reduce((state, reducer) => { return reducer(state, action) }, this.state);
         this.listeners.forEach(l => l()) //loop through the array of listeners
         return newState;
+    }
+    // Pass reducers into the addReducer function. Each reducer must take in a state, an action, and return a new state.
+    // Format: function reducer( )
+     addReducer(reducer) {
+        this.reducers = this.reducers.concat(reducer);
     }
 
     subscribe(fn) {
